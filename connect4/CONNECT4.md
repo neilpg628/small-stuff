@@ -1,0 +1,1 @@
+This is a simple implementation of Connect 4. The computer can think up to two moves ahead, and will do everything in its power to stop you! Simply run `$ javac *.java` and then `$ java Game` to play.
