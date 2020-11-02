@@ -1,4 +1,4 @@
-function [bfs, opt, cost, dir] = getbfs(A, b, o)
+function [bfs, opt, cost, directions] = getbfs(A, b, o)
 
 	[row, col] = size(A);
 	
@@ -28,32 +28,29 @@ function [bfs, opt, cost, dir] = getbfs(A, b, o)
 	obj = zeros(len, 1);
 	obj(1:length(o)) = o;
 	
-	for i = 1:num
-		cost(i) = dot(bfs(i,:), obj);
-	end
+	cost = bfs*obj(:);
 	
-	[M, I] = max(cost);
+	[~, I] = max(cost);
 	
 	opt = bfs(I, :);
 	
 	
 	[~, indices] = ismember(bfs, solutions, 'rows');
 	basic = C(indices, :);
-	dir = zeros(len, len, num);
+	directions = zeros(len, len, num);
 	
 	for i = 1:num
 		sele = basic(i, :);
+		bcol = -inv(A(:, sele))*A;
 		for j = 1:len
 			direc = zeros(1, len);
 			direc(j) = 1;
 			db = zeros(1, len);
-			db(sele) = -inv(A(:, sele))*A(:,j);
+			db(sele) = bcol(:, j);
 			direc = direc + db;
-			dir(j, :, i) = direc;
+			directions(j, :, i) = direc;
 		end
 	end
-	
-	dir = squeeze(dir);
-	
+
 end
 
